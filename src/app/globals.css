@@ -4,6 +4,27 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* hearim 디자인 토큰 — Light */
+  --hearim-primary: #18181b;   /* zinc-900 */
+  --hearim-bg: #fafafa;        /* zinc-50 */
+  --hearim-text: #18181b;      /* zinc-900 */
+  --hearim-muted: #71717a;     /* zinc-500 */
+  --hearim-border: #e4e4e7;    /* zinc-200 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+
+    /* hearim 디자인 토큰 — Dark */
+    --hearim-primary: #fafafa;   /* zinc-50 */
+    --hearim-bg: #09090b;       /* zinc-950 */
+    --hearim-text: #fafafa;      /* zinc-50 */
+    --hearim-muted: #a1a1aa;     /* zinc-400 */
+    --hearim-border: #27272a;    /* zinc-800 */
+  }
 }
 
 @theme inline {
@@ -11,13 +32,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* hearim 색상 토큰 */
+  --color-hearim-primary: var(--hearim-primary);
+  --color-hearim-bg: var(--hearim-bg);
+  --color-hearim-text: var(--hearim-text);
+  --color-hearim-muted: var(--hearim-muted);
+  --color-hearim-border: var(--hearim-border);
 }
 
 body {
