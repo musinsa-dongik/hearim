@@ -5,8 +5,8 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// TODO: 현재 Supabase RLS를 임시로 전체 공개 상태로 설정함
-// 로그인 구현 후 아래 RLS 정책을 본인만 수정/삭제 가능하도록 변경 필요
+// NOTE: Supabase RLS 정책 현황 (임시 전체 공개)
+// TODO: RLS를 본인만 수정/삭제 가능하도록 변경 필요
 // - SELECT: status='published' OR author_id=auth.uid()
 // - UPDATE: author_id=auth.uid()
 // - DELETE: author_id=auth.uid()

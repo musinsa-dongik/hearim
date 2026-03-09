@@ -16,12 +16,15 @@ type DraftItem = {
 export default async function DailyDraftsPage() {
   const supabase = await createClient();
 
-  // TODO: 로그인 구현 후 author_id = user.id 조건 추가하여 본인 draft만 조회
-  // 현재는 Supabase RLS를 임시로 전체 공개(USING true)로 설정한 상태
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data } = await supabase
     .from("dailies")
     .select("id, title, date, summary, created_at, profiles(name)")
     .eq("status", "draft")
+    .eq("author_id", user!.id)
     .order("created_at", { ascending: false });
 
   const drafts = (data ?? []) as unknown as DraftItem[];

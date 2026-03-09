@@ -22,15 +22,22 @@ export default async function Home() {
 
   const recentDailies = (data ?? []) as unknown as DailyItem[];
 
-  // TODO: 로그인 구현 후 본인 draft만 조회하도록 변경
-  const { data: draftData } = await supabase
-    .from("dailies")
-    .select("id, title, date, summary, profiles(name)")
-    .eq("status", "draft")
-    .order("created_at", { ascending: false })
-    .limit(5);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  const recentDrafts = (draftData ?? []) as unknown as DailyItem[];
+  let recentDrafts: DailyItem[] = [];
+  if (user) {
+    const { data: draftData } = await supabase
+      .from("dailies")
+      .select("id, title, date, summary, profiles(name)")
+      .eq("status", "draft")
+      .eq("author_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    recentDrafts = (draftData ?? []) as unknown as DailyItem[];
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">

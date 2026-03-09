@@ -7,6 +7,7 @@ import DraftActions from "@/components/daily/DraftActions";
 
 type Daily = {
   id: string;
+  author_id: string;
   title: string;
   date: string;
   content: string;
@@ -23,8 +24,10 @@ export default async function DailyDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  // TODO: 로그인 구현 후 draft는 본인만 볼 수 있도록 제한 필요
-  // 현재는 RLS 정책을 임시로 전체 공개(USING true)로 설정한 상태
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data } = await supabase
     .from("dailies")
     .select("*, profiles(name)")
@@ -36,6 +39,12 @@ export default async function DailyDetailPage({
   }
 
   const daily = data as unknown as Daily;
+  const isOwner = user?.id === daily.author_id;
+
+  // draft는 본인만 볼 수 있음
+  if (daily.status === "draft" && !isOwner) {
+    notFound();
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -51,7 +60,7 @@ export default async function DailyDetailPage({
             <Badge variant="warning">초안</Badge>
           )}
         </div>
-        {daily.status === "draft" && (
+        {daily.status === "draft" && isOwner && (
           <div className="mt-4">
             <DraftActions dailyId={daily.id} />
           </div>
