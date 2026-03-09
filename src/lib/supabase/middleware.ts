@@ -16,35 +16,35 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
+            request.cookies.set(name, value),
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // TODO: 로그인 구현 후 보호 경로 활성화 (현재 Supabase RLS도 임시로 전체 공개 상태)
-  // const protectedPaths = ["/daily/new", "/daily/write", "/daily/drafts"];
-  // const isProtected = protectedPaths.some((path) =>
-  //   request.nextUrl.pathname.startsWith(path)
-  // );
-  //
-  // if (isProtected && !user) {
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = "/login";
-  //   url.searchParams.set("redirect", request.nextUrl.pathname);
-  //   return NextResponse.redirect(url);
-  // }
+  // 보호된 경로: 로그인 안 되어 있으면 /login으로 리다이렉트
+  const protectedPaths = ["/daily/new", "/daily/write", "/daily/drafts"];
+  const isProtected = protectedPaths.some((path) =>
+    request.nextUrl.pathname.startsWith(path),
+  );
+
+  if (isProtected && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.searchParams.set("redirectTo", request.nextUrl.pathname);
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse;
 }

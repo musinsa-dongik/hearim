@@ -9,9 +9,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/client";
 
 const NAV_ITEMS = [
   { label: "데일리", href: "/daily" },
@@ -21,7 +22,14 @@ const NAV_ITEMS = [
 
 export default function Header({ user }: { user: User | null }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.refresh(); // 서버 컴포넌트(HeaderWrapper)가 다시 실행되어 user=null로 갱신
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-hearim-border bg-hearim-bg/80 backdrop-blur">
@@ -54,9 +62,17 @@ export default function Header({ user }: { user: User | null }) {
         {/* 인증 + 모바일 토글 */}
         <div className="flex items-center gap-2">
           {user ? (
-            <span className="hidden text-sm text-hearim-muted md:block">
-              {user.email}
-            </span>
+            <div className="hidden items-center gap-3 md:flex">
+              <span className="text-sm text-hearim-muted">
+                {user.email}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="rounded-lg px-3 py-1.5 text-sm font-medium text-hearim-muted transition-colors hover:text-hearim-text"
+              >
+                로그아웃
+              </button>
+            </div>
           ) : (
             <Link
               href="/login"
@@ -110,9 +126,17 @@ export default function Header({ user }: { user: User | null }) {
           })}
           <div className="mt-2 border-t border-hearim-border pt-2">
             {user ? (
-              <span className="block px-3 py-2 text-sm text-hearim-muted">
-                {user.email}
-              </span>
+              <div>
+                <span className="block px-3 py-2 text-sm text-hearim-muted">
+                  {user.email}
+                </span>
+                <button
+                  onClick={() => { setMobileOpen(false); handleLogout(); }}
+                  className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-hearim-muted hover:text-hearim-text"
+                >
+                  로그아웃
+                </button>
+              </div>
             ) : (
               <Link
                 href="/login"
