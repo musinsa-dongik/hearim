@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import Badge from "@/components/ui/Badge";
 
 type DailyItem = {
   id: string;
@@ -20,6 +21,16 @@ export default async function Home() {
     .limit(5);
 
   const recentDailies = (data ?? []) as unknown as DailyItem[];
+
+  // TODO: 로그인 구현 후 본인 draft만 조회하도록 변경
+  const { data: draftData } = await supabase
+    .from("dailies")
+    .select("id, title, date, summary, profiles(name)")
+    .eq("status", "draft")
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  const recentDrafts = (draftData ?? []) as unknown as DailyItem[];
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -76,6 +87,46 @@ export default async function Home() {
           </div>
         )}
       </section>
+
+      {recentDrafts.length > 0 && (
+        <section className="mt-10">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+              내 초안
+            </h2>
+            <Link
+              href="/daily/drafts"
+              className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+            >
+              전체 보기
+            </Link>
+          </div>
+          <div className="mt-4 space-y-3">
+            {recentDrafts.map((draft) => (
+              <Link
+                key={draft.id}
+                href={`/daily/${draft.id}`}
+                className="block rounded-lg border border-amber-200 p-4 transition-colors hover:bg-amber-50 dark:border-amber-800 dark:hover:bg-amber-900/20"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="warning">초안</Badge>
+                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+                      {draft.title}
+                    </h3>
+                  </div>
+                  <span className="text-sm text-zinc-400">
+                    {draft.profiles?.name}
+                  </span>
+                </div>
+                {draft.summary && (
+                  <p className="mt-1 text-sm text-zinc-500">{draft.summary}</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
