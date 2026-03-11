@@ -40,14 +40,18 @@ function SearchForm() {
 
     const supabase = createClient();
 
-    // 데일리 검색 (제목/요약 ilike)
-    const { data: dailies } = await supabase
-      .from("dailies")
-      .select("id, title, date, summary, profiles(name)")
-      .eq("status", "published")
-      .or(`title.ilike.%${q}%,summary.ilike.%${q}%`)
-      .order("date", { ascending: false })
-      .limit(20);
+    // 데일리 검색 (FTS: Full-Text Search)
+    const { data: ftsResults } = await supabase
+      .rpc("search_dailies", { query: q });
+
+    // FTS 결과의 ID로 profiles join 조회
+    const ftsIds = (ftsResults ?? []).map((r: { id: string }) => r.id);
+    const { data: dailies } = ftsIds.length > 0
+      ? await supabase
+          .from("dailies")
+          .select("id, title, date, summary, profiles(name)")
+          .in("id", ftsIds)
+      : { data: [] };
 
     // 위클리 검색 (제목/요약 ilike)
     const { data: weeklies } = await supabase
