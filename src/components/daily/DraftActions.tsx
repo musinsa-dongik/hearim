@@ -19,7 +19,7 @@ export default function DraftActions({ dailyId }: { dailyId: string }) {
     const supabase = createClient();
     const { error } = await supabase
       .from("dailies")
-      .update({ status: "published" as const })
+      .update({ status: "published" } as never)
       .eq("id", dailyId);
 
     if (error) {

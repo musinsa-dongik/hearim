@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Badge from "@/components/ui/Badge";
 import DraftActions from "@/components/daily/DraftActions";
+import PostActions from "@/components/daily/PostActions";
 
 type Daily = {
   id: string;
@@ -63,6 +64,11 @@ export default async function DailyDetailPage({
         {daily.status === "draft" && isOwner && (
           <div className="mt-4">
             <DraftActions dailyId={daily.id} />
+          </div>
+        )}
+        {daily.status === "published" && isOwner && (
+          <div className="mt-4">
+            <PostActions dailyId={daily.id} />
           </div>
         )}
       </div>
