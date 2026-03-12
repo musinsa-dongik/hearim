@@ -1,25 +1,16 @@
 # 헤아림 Claude Code 스킬 사용법
 
+> **설치 (터미널에서 한 줄 실행):**
+> ```bash
+> curl -sL https://raw.githubusercontent.com/musinsa-dongik/hearim/main/scripts/install-skills.sh | bash
+> ```
+
 ## 스킬 목록
 
 | 스킬 | 명령어 | 설명 |
 |------|--------|------|
 | 데일리 작성 | `/hearim-daily` | 오늘의 학습 기록을 md 파일로 생성 |
 | DB 저장 | `/hearim-push` | md 파일을 Supabase DB에 draft로 저장 |
-
-## 원클릭 설치
-
-레포 클론 없이 아래 한 줄로 설치합니다:
-
-```bash
-curl -sL https://raw.githubusercontent.com/musinsa-dongik/hearim/main/scripts/install-skills.sh | bash
-```
-
-설치되는 것:
-- `~/.claude/commands/hearim-daily.md` — 데일리 작성 스킬
-- `~/.claude/commands/hearim-push.md` — DB 저장 스킬
-- `~/.hearim-config` — 레포 경로 설정 (템플릿)
-- `~/.zshrc`에 환경 변수 추가 — Supabase 접속 정보
 
 ## 설치 후 필수 설정
 
