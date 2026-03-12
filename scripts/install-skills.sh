@@ -3,6 +3,7 @@ set -e
 
 REPO_BASE="https://raw.githubusercontent.com/musinsa-dongik/hearim/main"
 CMD_DIR="$HOME/.claude/commands"
+SHELL_RC="$HOME/.zshrc"
 
 echo "=== 헤아림 스킬 설치 ==="
 echo ""
@@ -37,15 +38,34 @@ fi
 mkdir -p "$HOME/ai-workspace/hearim/daily"
 echo "  ✓ ~/ai-workspace/hearim/daily/ 디렉토리 생성"
 
-# 5. 안내
+# 5. 환경 변수 설정 (~/.zshrc)
+if grep -q "HEARIM_SUPABASE_URL" "$SHELL_RC" 2>/dev/null; then
+  echo "  - 환경 변수 이미 존재 (건너뜀)"
+else
+  cat >> "$SHELL_RC" << 'ZSHRC'
+
+# === 헤아림 ===
+export HEARIM_SUPABASE_URL="https://uoubxqesmvpvtqcghvps.supabase.co"
+export HEARIM_SERVICE_ROLE_KEY="여기에_서비스_롤_키_입력"
+ZSHRC
+  echo "  ✓ ~/.zshrc에 환경 변수 추가"
+  echo "    → HEARIM_SERVICE_ROLE_KEY를 팀 리드에게 전달받아 수정하세요"
+fi
+
+# 6. 안내
 echo ""
 echo "=== 설치 완료 ==="
+echo ""
+echo "⚠️  필수: ~/.zshrc의 HEARIM_SERVICE_ROLE_KEY를 실제 키로 교체하세요"
+echo "    (팀 리드에게 DM으로 전달받기)"
+echo ""
+echo "설정 후:"
+echo "  source ~/.zshrc"
 echo ""
 echo "사용법:"
 echo "  1. Claude Code에서 /hearim-daily → 학습 기록 md 생성"
 echo "  2. Claude Code에서 /hearim-push  → DB에 draft로 저장"
 echo ""
-echo "추가 설정:"
-echo "  - ~/.hearim-config  → 커밋 수집할 레포 경로 추가"
-echo "  - ~/hearim/.env.local → Supabase 키 설정 (/hearim-push용)"
+echo "선택 설정:"
+echo "  ~/.hearim-config → 커밋 수집할 레포 경로 추가"
 echo ""
