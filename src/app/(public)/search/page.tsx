@@ -41,8 +41,8 @@ function SearchForm() {
     const supabase = createClient();
 
     // 데일리 검색 (FTS: Full-Text Search)
-    const { data: ftsResults } = await supabase
-      .rpc("search_dailies", { query: q });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: ftsResults } = await (supabase.rpc as any)("search_dailies", { query: q });
 
     // FTS 결과의 ID로 profiles join 조회
     const ftsIds = (ftsResults ?? []).map((r: { id: string }) => r.id);
