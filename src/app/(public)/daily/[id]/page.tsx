@@ -73,7 +73,7 @@ export default async function DailyDetailPage({
         )}
       </div>
 
-      <article className="prose prose-zinc max-w-none dark:prose-invert">
+      <article className="prose max-w-none prose-invert prose-p:text-[#e3e2e0] prose-headings:text-[#e3e2e0] prose-strong:text-[#e3e2e0] prose-li:text-[#e3e2e0] prose-a:text-blue-400 prose-code:text-[#e3e2e0] prose-blockquote:text-[#9b9a97] text-[#e3e2e0]">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {daily.content}
         </ReactMarkdown>

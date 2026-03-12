@@ -43,6 +43,13 @@ export default function DraftActions({ dailyId }: { dailyId: string }) {
       <Button variant="primary" onClick={handlePublish} disabled={loading}>
         확정
       </Button>
+      <Button
+        variant="secondary"
+        onClick={() => router.push(`/daily/${dailyId}/edit`)}
+        disabled={loading}
+      >
+        수정
+      </Button>
       <Button variant="ghost" onClick={handleDelete} disabled={loading}>
         삭제
       </Button>

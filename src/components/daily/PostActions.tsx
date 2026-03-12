@@ -26,6 +26,13 @@ export default function PostActions({ dailyId }: { dailyId: string }) {
 
   return (
     <div className="flex gap-2">
+      <Button
+        variant="secondary"
+        onClick={() => router.push(`/daily/${dailyId}/edit`)}
+        disabled={loading}
+      >
+        수정
+      </Button>
       <Button variant="ghost" onClick={handleDelete} disabled={loading}>
         삭제
       </Button>

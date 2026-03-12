@@ -35,9 +35,10 @@ export async function updateSession(request: NextRequest) {
 
   // 보호된 경로: 로그인 안 되어 있으면 /login으로 리다이렉트
   const protectedPaths = ["/daily/new", "/daily/write", "/daily/drafts"];
-  const isProtected = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path),
-  );
+  const isProtected =
+    protectedPaths.some((path) =>
+      request.nextUrl.pathname.startsWith(path),
+    ) || /^\/daily\/[^/]+\/edit/.test(request.nextUrl.pathname);
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone();
