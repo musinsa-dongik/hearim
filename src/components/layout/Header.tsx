@@ -63,6 +63,16 @@ export default function Header({ user }: { user: User | null }) {
         <div className="flex items-center gap-2">
           {user ? (
             <div className="hidden items-center gap-3 md:flex">
+              <Link
+                href="/daily/drafts"
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  pathname.startsWith("/daily/drafts")
+                    ? "bg-hearim-primary text-hearim-bg"
+                    : "text-hearim-muted hover:text-hearim-text"
+                }`}
+              >
+                내 초안
+              </Link>
               <span className="text-sm text-hearim-muted">
                 {user.email}
               </span>
@@ -127,6 +137,17 @@ export default function Header({ user }: { user: User | null }) {
           <div className="mt-2 border-t border-hearim-border pt-2">
             {user ? (
               <div>
+                <Link
+                  href="/daily/drafts"
+                  onClick={() => setMobileOpen(false)}
+                  className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    pathname.startsWith("/daily/drafts")
+                      ? "bg-hearim-primary text-hearim-bg"
+                      : "text-hearim-muted hover:text-hearim-text"
+                  }`}
+                >
+                  내 초안
+                </Link>
                 <span className="block px-3 py-2 text-sm text-hearim-muted">
                   {user.email}
                 </span>
