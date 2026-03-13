@@ -21,11 +21,15 @@ allowed-tools: Bash(curl:*), Read, Glob
 
 파일이 없으면 사용자에게 알리고 `/hearim-daily`를 먼저 실행하라고 안내한다.
 
-## Step 2. 환경 변수 로드
+## Step 2. 환경 변수 확인
 
-hearim 프로젝트의 `.env.local`에서 읽는다:
-```bash
-cd ~/hearim && export $(grep -v '^#' .env.local | grep -v '^$' | xargs) 2>/dev/null
+셸 환경 변수 `HEARIM_SUPABASE_URL`과 `HEARIM_SERVICE_ROLE_KEY`를 사용한다.
+(설치 스크립트가 `~/.zshrc`에 추가함)
+
+설정되지 않았으면 사용자에게 안내한다:
+```
+환경 변수가 설정되지 않았습니다.
+scripts/install-skills.sh를 실행하거나 ~/.zshrc에 직접 추가하세요.
 ```
 
 ## Step 3. author_id 조회
@@ -33,9 +37,9 @@ cd ~/hearim && export $(grep -v '^#' .env.local | grep -v '^$' | xargs) 2>/dev/n
 git 이메일을 동적으로 가져와서 프로필을 조회한다:
 ```bash
 GIT_EMAIL=$(git config user.email)
-curl -sf "${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/profiles?email=eq.${GIT_EMAIL}&select=id" \
-  -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}"
+curl -sf "${HEARIM_SUPABASE_URL}/rest/v1/profiles?email=eq.${GIT_EMAIL}&select=id" \
+  -H "apikey: ${HEARIM_SERVICE_ROLE_KEY}" \
+  -H "Authorization: Bearer ${HEARIM_SERVICE_ROLE_KEY}"
 ```
 
 조회 결과가 없으면 사용자에게 author_id를 직접 물어본다.
@@ -44,9 +48,9 @@ curl -sf "${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/profiles?email=eq.${GIT_EMAIL}&sel
 
 같은 날짜에 이미 데일리가 있는지 확인한다:
 ```bash
-curl -sf "${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/dailies?date=eq.YYYY-MM-DD&author_id=eq.<author_id>&select=id,title" \
-  -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}"
+curl -sf "${HEARIM_SUPABASE_URL}/rest/v1/dailies?date=eq.YYYY-MM-DD&author_id=eq.<author_id>&select=id,title" \
+  -H "apikey: ${HEARIM_SERVICE_ROLE_KEY}" \
+  -H "Authorization: Bearer ${HEARIM_SERVICE_ROLE_KEY}"
 ```
 
 - 이미 존재하면 사용자에게 알리고 **UPDATE** 할지 물어본다.
@@ -64,9 +68,9 @@ md 파일의 내용을 읽어서 INSERT한다.
 ### INSERT
 
 ```bash
-curl -sf "${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/dailies" \
-  -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+curl -sf "${HEARIM_SUPABASE_URL}/rest/v1/dailies" \
+  -H "apikey: ${HEARIM_SERVICE_ROLE_KEY}" \
+  -H "Authorization: Bearer ${HEARIM_SERVICE_ROLE_KEY}" \
   -H "Content-Type: application/json" \
   -H "Prefer: return=representation" \
   -d '{
@@ -93,4 +97,4 @@ INSERT 성공 후 사용자에게 알린다:
 ## 주의사항
 - 민감한 정보(API 키, 비밀번호 등)가 출력에 노출되지 않도록 한다
 - curl 실행 시 환경 변수를 echo하거나 출력하지 않는다
-- `source` 대신 `export $(... | xargs)` 패턴을 사용한다 (환경 변수 누출 방지)
+- `HEARIM_SUPABASE_URL`과 `HEARIM_SERVICE_ROLE_KEY` 환경 변수를 사용한다 (~/.zshrc에 설정)
