@@ -16,6 +16,34 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // 프로필 자동 생성: auth.users에는 있지만 profiles에 없을 때
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("id", user.id)
+          .single();
+
+        if (!profile) {
+          const name =
+            user.user_metadata?.full_name ||
+            user.user_metadata?.user_name ||
+            user.email?.split("@")[0] ||
+            "Unknown";
+
+          await supabase.from("profiles").insert({
+            id: user.id,
+            name,
+            email: user.email ?? null,
+            avatar_url: user.user_metadata?.avatar_url ?? null,
+          });
+        }
+      }
+
       // 성공 → 원래 가려던 페이지로 이동
       return NextResponse.redirect(`${origin}${redirectTo}`);
     }
