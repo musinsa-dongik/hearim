@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { gemini } from "@/lib/gemini";
 
-// Vercel Cron: 매주 월요일 00:00 UTC (= 09:00 KST)
+// Vercel Cron: 매주 토요일 09:00 UTC (= 18:00 KST)
 // 수동 호출도 가능 (CRON_SECRET 헤더 필요)
 
 export async function GET(request: Request) {
@@ -16,22 +16,23 @@ export async function GET(request: Request) {
 
   const admin = createAdminClient();
 
-  // 지난주 월~일 범위 계산
+  // 이번 주 월~금 범위 계산 (토요일에 실행되므로 같은 주의 월~금)
   const now = new Date();
-  const lastMonday = new Date(now);
-  lastMonday.setDate(now.getDate() - ((now.getDay() + 6) % 7) - 7);
-  lastMonday.setHours(0, 0, 0, 0);
+  const dayOfWeek = now.getDay(); // 토요일 = 6
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  monday.setHours(0, 0, 0, 0);
 
-  const lastSunday = new Date(lastMonday);
-  lastSunday.setDate(lastMonday.getDate() + 6);
+  const friday = new Date(monday);
+  friday.setDate(monday.getDate() + 4);
 
-  const weekStart = lastMonday.toISOString().slice(0, 10);
-  const weekEnd = lastSunday.toISOString().slice(0, 10);
+  const weekStart = monday.toISOString().slice(0, 10);
+  const weekEnd = friday.toISOString().slice(0, 10);
 
   // 해당 주차 계산
-  const startOfYear = new Date(lastMonday.getFullYear(), 0, 1);
+  const startOfYear = new Date(monday.getFullYear(), 0, 1);
   const weekNumber = Math.ceil(
-    ((lastMonday.getTime() - startOfYear.getTime()) / 86400000 + 1) / 7
+    ((monday.getTime() - startOfYear.getTime()) / 86400000 + 1) / 7
   );
 
   // 이미 생성된 위클리가 있는지 확인
