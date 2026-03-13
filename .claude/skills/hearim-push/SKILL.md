@@ -1,11 +1,14 @@
 ---
-description: "헤아림 데일리 md 파일을 Supabase DB에 저장 (INSERT/UPDATE)"
-allowed-tools: Bash(curl:*), Read, Glob
+name: hearim-push
+description: "헤아림 데일리 md 파일을 Supabase DB에 저장 (INSERT/UPDATE). 'DB 저장', 'push' 키워드에 반응"
+argument-hint: "[YYYY-MM-DD]"
+disable-model-invocation: true
+allowed-tools: Bash(curl *), Bash(git *), Read, Glob
 ---
 
-# /hearim-push - 헤아림 데일리 DB 저장
+# 헤아림 데일리 DB 저장
 
-`/hearim-daily`로 생성한 md 파일을 Supabase dailies 테이블에 저장한다.
+`/hearim`으로 생성한 md 파일을 Supabase dailies 테이블에 저장한다.
 
 ## Step 1. 대상 파일 확인
 
@@ -19,17 +22,18 @@ allowed-tools: Bash(curl:*), Read, Glob
 /hearim-push 2026-03-09
 ```
 
-파일이 없으면 사용자에게 알리고 `/hearim-daily`를 먼저 실행하라고 안내한다.
+파일이 없으면 사용자에게 알리고 `/hearim`을 먼저 실행하라고 안내한다.
 
 ## Step 2. 환경 변수 확인
 
 셸 환경 변수 `HEARIM_SUPABASE_URL`과 `HEARIM_SERVICE_ROLE_KEY`를 사용한다.
-(설치 스크립트가 `~/.zshrc`에 추가함)
 
 설정되지 않았으면 사용자에게 안내한다:
 ```
 환경 변수가 설정되지 않았습니다.
-scripts/install-skills.sh를 실행하거나 ~/.zshrc에 직접 추가하세요.
+~/.zshrc에 아래를 추가하세요:
+  export HEARIM_SUPABASE_URL="your-supabase-url"
+  export HEARIM_SERVICE_ROLE_KEY="your-service-role-key"
 ```
 
 ## Step 3. author_id 조회
@@ -95,6 +99,7 @@ INSERT 성공 후 사용자에게 알린다:
 - "초안(draft)으로 저장됨. 사이트에서 확인 후 확정하세요."
 
 ## 주의사항
+
 - 민감한 정보(API 키, 비밀번호 등)가 출력에 노출되지 않도록 한다
 - curl 실행 시 환경 변수를 echo하거나 출력하지 않는다
-- `HEARIM_SUPABASE_URL`과 `HEARIM_SERVICE_ROLE_KEY` 환경 변수를 사용한다 (~/.zshrc에 설정)
+- `HEARIM_SUPABASE_URL`과 `HEARIM_SERVICE_ROLE_KEY` 환경 변수를 사용한다
