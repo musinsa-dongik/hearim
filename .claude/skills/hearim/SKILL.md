@@ -12,7 +12,7 @@ allowed-tools: Bash(git *), Bash(bash *), Bash(source *), Read, Write, Edit, Glo
 
 ## 환경 감지
 
-!`bash ${CLAUDE_SKILL_DIR}/scripts/detect-env.sh`
+!`bash .claude/skills/hearim/scripts/detect-env.sh`
 
 ## 실행 모드
 
