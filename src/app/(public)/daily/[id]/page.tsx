@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
 import DraftActions from "@/components/daily/DraftActions";
 import PostActions from "@/components/daily/PostActions";
 
@@ -50,10 +50,8 @@ export default async function DailyDetailPage({
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          {daily.title}
-        </h1>
-        <div className="mt-2 flex items-center gap-2 text-sm text-zinc-500">
+        <h1 className="text-2xl font-bold text-foreground">{daily.title}</h1>
+        <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
           <span>{daily.profiles?.name}</span>
           <span>·</span>
           <span>{daily.date}</span>
@@ -73,7 +71,7 @@ export default async function DailyDetailPage({
         )}
       </div>
 
-      <article className="prose max-w-none prose-invert prose-p:text-[#e3e2e0] prose-headings:text-[#e3e2e0] prose-strong:text-[#e3e2e0] prose-li:text-[#e3e2e0] prose-a:text-blue-400 prose-code:text-[#e3e2e0] prose-blockquote:text-[#9b9a97] text-[#e3e2e0]">
+      <article className="prose prose-zinc max-w-none dark:prose-invert">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {daily.content}
         </ReactMarkdown>

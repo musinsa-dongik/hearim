@@ -1,11 +1,11 @@
 "use client";
 
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
-// 확정(published)된 게시물의 삭제 버튼
 export default function PostActions({ dailyId }: { dailyId: string }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -17,17 +17,18 @@ export default function PostActions({ dailyId }: { dailyId: string }) {
     const { error } = await supabase.from("dailies").delete().eq("id", dailyId);
 
     if (error) {
-      alert("삭제 실패: " + error.message);
+      toast.error("삭제 실패: " + error.message);
       setLoading(false);
       return;
     }
+    toast.success("삭제되었습니다.");
     router.push("/daily");
   }
 
   return (
     <div className="flex gap-2">
       <Button
-        variant="secondary"
+        variant="outline"
         onClick={() => router.push(`/daily/${dailyId}/edit`)}
         disabled={loading}
       >

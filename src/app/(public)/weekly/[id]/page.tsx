@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
 
 type Weekly = {
   id: string;
@@ -45,11 +45,9 @@ export default async function WeeklyDetailPage({
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          {weekly.title}
-        </h1>
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-          <Badge>W{weekly.week_number}</Badge>
+        <h1 className="text-2xl font-bold text-foreground">{weekly.title}</h1>
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+          <Badge variant="secondary">W{weekly.week_number}</Badge>
           <span>
             {weekly.week_start} ~ {weekly.week_end}
           </span>

@@ -13,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const NAV_ITEMS = [
   { label: "데일리", href: "/daily" },
@@ -59,10 +60,21 @@ export default function Header({ user }: { user: User | null }) {
           })}
         </nav>
 
-        {/* 인증 + 모바일 토글 */}
+        {/* 인증 + 테마 + 모바일 토글 */}
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <div className="hidden items-center gap-3 md:flex">
+              <Link
+                href="/dashboard"
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  pathname.startsWith("/dashboard")
+                    ? "bg-hearim-primary text-hearim-bg"
+                    : "text-hearim-muted hover:text-hearim-text"
+                }`}
+              >
+                대시보드
+              </Link>
               <Link
                 href="/daily/drafts"
                 className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -137,6 +149,17 @@ export default function Header({ user }: { user: User | null }) {
           <div className="mt-2 border-t border-hearim-border pt-2">
             {user ? (
               <div>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileOpen(false)}
+                  className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    pathname.startsWith("/dashboard")
+                      ? "bg-hearim-primary text-hearim-bg"
+                      : "text-hearim-muted hover:text-hearim-text"
+                  }`}
+                >
+                  대시보드
+                </Link>
                 <Link
                   href="/daily/drafts"
                   onClick={() => setMobileOpen(false)}

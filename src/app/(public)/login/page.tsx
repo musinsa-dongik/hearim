@@ -40,17 +40,17 @@ function LoginForm() {
       <button
         onClick={handleLogin}
         disabled={isLoading}
-        className="flex w-full items-center justify-center gap-3 rounded-lg border border-hearim-border bg-white px-4 py-3 text-sm font-medium text-hearim-text transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+        className="flex w-full items-center justify-center gap-3 rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
       >
         <GitHubIcon />
         {isLoading ? "로그인 중..." : "회사 계정으로 로그인"}
       </button>
 
       {error && (
-        <p className="mt-4 text-center text-sm text-red-500">{error}</p>
+        <p className="mt-4 text-center text-sm text-destructive">{error}</p>
       )}
 
-      <p className="mt-6 text-center text-xs text-hearim-muted">
+      <p className="mt-6 text-center text-xs text-muted-foreground">
         회사 GitHub 계정으로 로그인해주세요
       </p>
     </>
@@ -59,18 +59,18 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-hearim-bg px-4">
+    <div className="flex min-h-[80vh] items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* 타이틀 — 카드 바깥 */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-hearim-text">헤아림</h1>
-          <p className="mt-2 text-sm text-hearim-muted">
+          <h1 className="text-3xl font-bold text-foreground">헤아림</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
             메타인지 스터디 플랫폼
           </p>
         </div>
 
         {/* 로그인 카드 */}
-        <div className="rounded-2xl bg-white p-8 shadow-lg dark:bg-zinc-900">
+        <div className="rounded-2xl border border-border bg-card p-8 shadow-lg">
           <Suspense fallback={<div className="h-20" />}>
             <LoginForm />
           </Suspense>

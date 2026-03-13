@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import Card from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import DraftActions from "@/components/daily/DraftActions";
 
 type DraftItem = {
@@ -31,41 +31,43 @@ export default async function DailyDraftsPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-2xl font-bold text-hearim-text">내 초안</h1>
-      <p className="mt-2 text-sm text-hearim-muted">
+      <h1 className="text-2xl font-bold text-foreground">내 초안</h1>
+      <p className="mt-2 text-sm text-muted-foreground">
         draft 상태의 데일리를 확인하고 확정/삭제할 수 있습니다.
       </p>
 
       {drafts.length === 0 ? (
-        <p className="mt-8 text-hearim-muted">초안이 없습니다.</p>
+        <p className="mt-8 text-muted-foreground">초안이 없습니다.</p>
       ) : (
         <div className="mt-6 space-y-4">
           {drafts.map((draft) => (
             <Card key={draft.id}>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="warning">초안</Badge>
-                    <span className="text-sm text-hearim-muted">
-                      {draft.date}
-                    </span>
+              <CardContent>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="warning">초안</Badge>
+                      <span className="text-sm text-muted-foreground">
+                        {draft.date}
+                      </span>
+                    </div>
+                    <Link
+                      href={`/daily/${draft.id}`}
+                      className="mt-2 block font-semibold text-foreground hover:underline"
+                    >
+                      {draft.title}
+                    </Link>
+                    {draft.summary && (
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {draft.summary}
+                      </p>
+                    )}
                   </div>
-                  <Link
-                    href={`/daily/${draft.id}`}
-                    className="mt-2 block font-semibold text-hearim-text hover:underline"
-                  >
-                    {draft.title}
-                  </Link>
-                  {draft.summary && (
-                    <p className="mt-1 text-sm text-hearim-muted">
-                      {draft.summary}
-                    </p>
-                  )}
                 </div>
-              </div>
-              <div className="mt-4 flex justify-end">
-                <DraftActions dailyId={draft.id} />
-              </div>
+                <div className="mt-4 flex justify-end">
+                  <DraftActions dailyId={draft.id} />
+                </div>
+              </CardContent>
             </Card>
           ))}
         </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Badge from "@/components/ui/Badge";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
@@ -91,29 +92,26 @@ function SearchForm() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="제목 또는 요약으로 검색..."
-            className="flex-1 rounded-lg border border-zinc-300 px-4 py-2 text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
+            className="flex-1 rounded-lg border border-input bg-background px-4 py-2 text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
-          <button
-            type="submit"
-            className="rounded-lg bg-zinc-900 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
-          >
-            검색
-          </button>
+          <Button type="submit">검색</Button>
         </div>
       </form>
 
       <div className="mt-8">
-        {loading && <p className="text-zinc-500">검색 중...</p>}
+        {loading && (
+          <p className="text-muted-foreground">검색 중...</p>
+        )}
 
         {!loading && searched && results.length === 0 && (
-          <p className="text-zinc-500">
+          <p className="text-muted-foreground">
             &quot;{query}&quot;에 대한 검색 결과가 없습니다.
           </p>
         )}
 
         {!loading && results.length > 0 && (
           <div className="space-y-4">
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-muted-foreground">
               {results.length}건의 결과
             </p>
             {results.map((item) => (
@@ -124,21 +122,21 @@ function SearchForm() {
                     ? `/daily/${item.id}`
                     : `/weekly/${item.id}`
                 }
-                className="block rounded-lg border border-zinc-200 p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
+                className="block rounded-lg border border-border p-4 transition-colors hover:bg-accent"
               >
                 <div className="flex items-center gap-2">
                   <Badge
                     variant={
-                      item.type === "daily" ? "default" : "success"
+                      item.type === "daily" ? "secondary" : "success"
                     }
                   >
                     {item.type === "daily" ? "데일리" : "위클리"}
                   </Badge>
-                  <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+                  <h3 className="font-semibold text-foreground">
                     {item.title}
                   </h3>
                 </div>
-                <div className="mt-1 text-sm text-zinc-400">
+                <div className="mt-1 text-sm text-muted-foreground">
                   {item.type === "daily" ? (
                     <>
                       {item.profiles?.name && (
@@ -154,7 +152,7 @@ function SearchForm() {
                   )}
                 </div>
                 {item.summary && (
-                  <p className="mt-1 text-sm text-zinc-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {item.summary}
                   </p>
                 )}
@@ -170,10 +168,10 @@ function SearchForm() {
 export default function SearchPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-        검색
-      </h1>
-      <Suspense fallback={<p className="mt-4 text-zinc-500">로딩 중...</p>}>
+      <h1 className="text-2xl font-bold text-foreground">검색</h1>
+      <Suspense
+        fallback={<p className="mt-4 text-muted-foreground">로딩 중...</p>}
+      >
         <SearchForm />
       </Suspense>
     </div>

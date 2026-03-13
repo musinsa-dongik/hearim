@@ -1,15 +1,11 @@
 "use client";
 
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
-// NOTE: Supabase RLS 정책 현황 (임시 전체 공개)
-// TODO: RLS를 본인만 수정/삭제 가능하도록 변경 필요
-// - SELECT: status='published' OR author_id=auth.uid()
-// - UPDATE: author_id=auth.uid()
-// - DELETE: author_id=auth.uid()
 export default function DraftActions({ dailyId }: { dailyId: string }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -23,10 +19,11 @@ export default function DraftActions({ dailyId }: { dailyId: string }) {
       .eq("id", dailyId);
 
     if (error) {
-      alert("게시 실패: " + error.message);
+      toast.error("게시 실패: " + error.message);
       setLoading(false);
       return;
     }
+    toast.success("데일리가 게시되었습니다.");
     router.refresh();
   }
 
@@ -34,17 +31,24 @@ export default function DraftActions({ dailyId }: { dailyId: string }) {
     if (!confirm("정말 삭제하시겠습니까?")) return;
     setLoading(true);
     const supabase = createClient();
-    await supabase.from("dailies").delete().eq("id", dailyId);
+    const { error } = await supabase.from("dailies").delete().eq("id", dailyId);
+
+    if (error) {
+      toast.error("삭제 실패: " + error.message);
+      setLoading(false);
+      return;
+    }
+    toast.success("삭제되었습니다.");
     router.refresh();
   }
 
   return (
     <div className="flex gap-2">
-      <Button variant="primary" onClick={handlePublish} disabled={loading}>
+      <Button onClick={handlePublish} disabled={loading}>
         확정
       </Button>
       <Button
-        variant="secondary"
+        variant="outline"
         onClick={() => router.push(`/daily/${dailyId}/edit`)}
         disabled={loading}
       >
