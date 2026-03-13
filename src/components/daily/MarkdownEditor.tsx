@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { useTheme } from "next-themes";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
@@ -16,6 +17,7 @@ export default function MarkdownEditor({
   onChange,
 }: Props) {
   const loaded = useRef(false);
+  const { resolvedTheme } = useTheme();
 
   const editor = useCreateBlockNote();
 
@@ -39,8 +41,12 @@ export default function MarkdownEditor({
   }
 
   return (
-    <div className="bn-override rounded-lg border border-hearim-border overflow-hidden [&_.bn-container]:!font-sans [&_.bn-container]:![--bn-colors-editor-background:#191919] [&_.bn-container]:![--bn-colors-editor-text:#e3e2e0] [&_.bn-editor]:!py-6 [&_.bn-editor]:!px-[20px]">
-      <BlockNoteView editor={editor} onChange={handleChange} theme="dark" />
+    <div className="rounded-lg border border-border overflow-hidden [&_.bn-container]:!font-sans [&_.bn-editor]:!py-6 [&_.bn-editor]:!px-[20px]">
+      <BlockNoteView
+        editor={editor}
+        onChange={handleChange}
+        theme={resolvedTheme === "light" ? "light" : "dark"}
+      />
     </div>
   );
 }

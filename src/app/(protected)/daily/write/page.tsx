@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import MarkdownEditor from "@/components/daily/DynamicMarkdownEditor";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export default function DailyWritePage() {
   const router = useRouter();
@@ -18,11 +19,11 @@ export default function DailyWritePage() {
 
   async function handleSave() {
     if (!title.trim()) {
-      alert("제목을 입력해 주세요.");
+      toast.warning("제목을 입력해 주세요.");
       return;
     }
     if (!content.trim()) {
-      alert("본문을 입력해 주세요.");
+      toast.warning("본문을 입력해 주세요.");
       return;
     }
 
@@ -34,7 +35,7 @@ export default function DailyWritePage() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      alert("로그인이 필요합니다.");
+      toast.error("로그인이 필요합니다.");
       setLoading(false);
       return;
     }
@@ -49,26 +50,27 @@ export default function DailyWritePage() {
     } as never);
 
     if (error) {
-      alert("저장 실패: " + error.message);
+      toast.error("저장 실패: " + error.message);
       setLoading(false);
       return;
     }
 
+    toast.success("초안이 저장되었습니다.");
     router.push("/daily/drafts");
   }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-2xl font-bold text-hearim-text">
+      <h1 className="text-2xl font-bold text-foreground">
         데일리 직접 작성
       </h1>
-      <p className="mt-1 text-sm text-hearim-muted">
+      <p className="mt-1 text-sm text-muted-foreground">
         마크다운 에디터로 직접 작성합니다. 초안으로 저장됩니다.
       </p>
 
       <div className="mt-8 space-y-6">
         <div>
-          <label className="mb-1 block text-sm font-medium text-hearim-text">
+          <label className="mb-1 block text-sm font-medium text-foreground">
             제목
           </label>
           <input
@@ -76,24 +78,24 @@ export default function DailyWritePage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="오늘의 메타인지 제목"
-            className="w-full rounded-lg border border-hearim-border bg-hearim-bg px-4 py-2 text-sm text-hearim-text focus:outline-none focus:ring-2 focus:ring-hearim-primary"
+            className="w-full rounded-lg border border-input bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-hearim-text">
+          <label className="mb-1 block text-sm font-medium text-foreground">
             날짜
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-lg border border-hearim-border bg-hearim-bg px-4 py-2 text-sm text-hearim-text focus:outline-none focus:ring-2 focus:ring-hearim-primary"
+            className="w-full rounded-lg border border-input bg-background px-4 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-hearim-text">
+          <label className="mb-1 block text-sm font-medium text-foreground">
             요약 (선택)
           </label>
           <input
@@ -101,23 +103,19 @@ export default function DailyWritePage() {
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
             placeholder="한 줄 요약"
-            className="w-full rounded-lg border border-hearim-border bg-hearim-bg px-4 py-2 text-sm text-hearim-text focus:outline-none focus:ring-2 focus:ring-hearim-primary"
+            className="w-full rounded-lg border border-input bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-hearim-text">
+          <label className="mb-1 block text-sm font-medium text-foreground">
             본문
           </label>
           <MarkdownEditor initialContent="" onChange={setContent} />
         </div>
 
         <div className="flex gap-2">
-          <Button
-            variant="primary"
-            onClick={handleSave}
-            disabled={loading}
-          >
+          <Button onClick={handleSave} disabled={loading}>
             {loading ? "저장 중..." : "초안 저장"}
           </Button>
           <Button
