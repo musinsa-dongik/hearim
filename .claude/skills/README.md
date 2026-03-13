@@ -12,9 +12,7 @@
 | 데일리/위클리 작성 | `/hearim [daily\|weekly]` | 학습 기록을 md 파일로 생성 |
 | DB 저장 | `/hearim-push [YYYY-MM-DD]` | md 파일을 Supabase DB에 draft로 저장 |
 
-> 스킬이 `.claude/skills/`로 마이그레이션되었습니다.
-> 기존 `.claude/commands/hearim-daily.md`, `hearim-push.md`는 레거시이며,
-> `.claude/skills/hearim/`, `.claude/skills/hearim-push/`가 우선 적용됩니다.
+> 스킬 파일은 `~/.claude/skills/`(글로벌)에 설치됩니다.
 
 ## 설치 후 필수 설정
 
