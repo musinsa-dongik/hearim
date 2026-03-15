@@ -95,7 +95,7 @@ curl -sf "${HEARIM_SUPABASE_URL}/rest/v1/dailies" \
 
 INSERT 성공 후 사용자에게 알린다:
 - 저장된 데일리 ID
-- 확인 URL: `http://localhost:3000/daily/<id>`
+- 확인 URL: `https://hearim.vercel.app/daily/<id>`
 - "초안(draft)으로 저장됨. 사이트에서 확인 후 확정하세요."
 
 ## 주의사항
