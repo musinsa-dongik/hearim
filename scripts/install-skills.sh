@@ -116,11 +116,11 @@ else
   cat >> "$SHELL_RC" << 'ZSHRC'
 
 # === 헤아림 ===
-export HEARIM_SUPABASE_URL="여기에_Supabase_URL_입력"
+export HEARIM_SUPABASE_URL="https://uoubxqesmvpvtqcghvps.supabase.co"
 export HEARIM_SERVICE_ROLE_KEY="여기에_서비스_롤_키_입력"
 ZSHRC
   echo "  OK ~/.zshrc에 환경 변수 추가"
-  echo "  ⚠️  HEARIM_SUPABASE_URL과 HEARIM_SERVICE_ROLE_KEY를 실제 값으로 교체하세요."
+  echo "  ⚠️  HEARIM_SERVICE_ROLE_KEY를 실제 키로 교체하세요."
   echo "     (팀 리드에게 DM으로 전달받기)"
 fi
 
