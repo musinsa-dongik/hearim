@@ -685,6 +685,28 @@ W3 원래 범위(열람 페이지 전체)에 **3/9 회의 액션 아이템**을 
 - 로컬 커맨드 연동 테스트 + 문서화
 - 수정 클릭 시 에디터로 수정 기능 추가
 
+### 스킬 시스템 리뷰 반영 (2026-03-15)
+
+- ✅ detect-env.sh 상대 경로 → SKILL.md 인라인 포함 (글로벌 설치 호환)
+- ✅ hearim-push 완료 URL localhost → hearim.vercel.app
+- ✅ install-skills.sh Supabase URL 복원 (공개 정보), key만 플레이스홀더
+- ✅ collectors.md 문구 수정 + 첫 실행 판별 기준 명확화
+- ✅ 위클리 모드: Git 수집하지 않음 명시
+
+#### TODO: hearim-push 인증 방식 변경 (service role key → anon key + 로그인 토큰)
+
+현재 `/hearim-push`는 service role key(관리자 키)를 사용하며, 신규 사용자마다 key를 DM 전달해야 한다.
+다수 사용자 대응을 위해 anon key + 사용자 로그인 토큰 방식으로 전환 필요.
+
+**필요한 작업:**
+1. CLI에서 Supabase 로그인 흐름 구현 — GitHub OAuth → 토큰을 `~/.hearim-session`에 저장 (다혜님)
+2. `hearim-push/SKILL.md` 수정 — service role key 대신 anon key + 저장된 토큰으로 curl 호출 (다혜님)
+3. dailies 테이블 `INSERT` RLS 정책 확인 — `auth.uid() = author_id` 필요 (**이동익님**)
+4. 토큰 갱신 로직 (refresh token) 추가 (다혜님)
+5. `install-skills.sh`에서 `HEARIM_SERVICE_ROLE_KEY` 제거, anon key로 교체
+
+> **우선순위:** 사용자가 늘어나기 전에 전환. 이동익님과 다음 회의에서 RLS 정책 확인 후 착수.
+
 ---
 
 ### 3/4 회의 결정사항 반영 메모
