@@ -26,13 +26,20 @@ type DailiesResponse = {
 async function fetchDailies({
   pageParam = 0,
   filter = "all",
+  search = "",
 }: {
   pageParam?: number;
   filter?: FilterType;
+  search?: string;
 }): Promise<DailiesResponse> {
-  const res = await fetch(
-    `/api/dailies?page=${pageParam}&pageSize=10&filter=${filter}`
-  );
+  const params = new URLSearchParams({
+    page: String(pageParam),
+    pageSize: "10",
+    filter,
+  });
+  if (search) params.set("search", search);
+
+  const res = await fetch(`/api/dailies?${params}`);
   if (!res.ok) throw new Error("Failed to fetch dailies");
   return res.json();
 }
@@ -53,6 +60,8 @@ export default function DailyListInfinite() {
   const { ref, inView } = useInView();
   const [filter, setFilter] = useState<FilterType>("all");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // 로그인 상태 확인
   useEffect(() => {
@@ -62,6 +71,12 @@ export default function DailyListInfinite() {
     });
   }, []);
 
+  // 검색어 디바운스 (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const {
     data,
     fetchNextPage,
@@ -70,8 +85,8 @@ export default function DailyListInfinite() {
     isLoading,
     isError,
   } = useInfiniteQuery({
-    queryKey: ["dailies", filter],
-    queryFn: ({ pageParam }) => fetchDailies({ pageParam, filter }),
+    queryKey: ["dailies", filter, debouncedSearch],
+    queryFn: ({ pageParam }) => fetchDailies({ pageParam, filter, search: debouncedSearch }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
@@ -110,23 +125,32 @@ export default function DailyListInfinite() {
 
   return (
     <>
-      {/* 필터 탭 */}
-      <div className="mt-6 flex gap-2">
-        {filterTabs
-          .filter((tab) => !tab.requiresAuth || isLoggedIn)
-          .map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setFilter(tab.key)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                filter === tab.key
-                  ? "bg-foreground text-background"
-                  : "bg-muted text-muted-foreground hover:bg-accent"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+      {/* 필터 탭 + 검색 */}
+      <div className="mt-6 flex items-center gap-3">
+        <div className="flex gap-2">
+          {filterTabs
+            .filter((tab) => !tab.requiresAuth || isLoggedIn)
+            .map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setFilter(tab.key)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                  filter === tab.key
+                    ? "bg-foreground text-background"
+                    : "bg-muted text-muted-foreground hover:bg-accent"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+        </div>
+        <input
+          type="text"
+          placeholder="검색..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="ml-auto w-48 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
       </div>
 
       {allDailies.length === 0 ? (

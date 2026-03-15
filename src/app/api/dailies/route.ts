@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get("page") ?? "0", 10);
   const pageSize = parseInt(searchParams.get("pageSize") ?? "10", 10);
   const filter = searchParams.get("filter") ?? "all"; // all | mine | team
+  const search = searchParams.get("search") ?? "";
 
   const from = page * pageSize;
   const to = from + pageSize - 1;
@@ -67,6 +68,20 @@ export async function GET(request: NextRequest) {
   } else if (teamMemberIds) {
     dataQuery = dataQuery.in("author_id", teamMemberIds);
     countQuery = countQuery.in("author_id", teamMemberIds);
+  }
+
+  // 검색어 필터 (FTS RPC 사용)
+  if (search) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: ftsResults } = await (supabase.rpc as any)("search_dailies", { query: search });
+    const ids: string[] = (ftsResults ?? []).map((r: { id: string }) => r.id);
+
+    if (ids.length === 0) {
+      return NextResponse.json({ dailies: [], totalCount: 0 });
+    }
+
+    dataQuery = dataQuery.in("id", ids);
+    countQuery = countQuery.in("id", ids);
   }
 
   const [{ data, error }, { count }] = await Promise.all([
