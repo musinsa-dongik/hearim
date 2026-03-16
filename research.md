@@ -171,7 +171,7 @@ CREATE POLICY "Authors can update own dailies"
 
 ALTER TABLE weeklies ENABLE ROW LEVEL SECURITY;
 
--- 누구나 위클리 열람 (AI가 service_role_key로 생성)
+-- 누구나 위클리 열람
 CREATE POLICY "Anyone can read weeklies"
   ON weeklies FOR SELECT USING (status = 'published');
 ```
@@ -238,7 +238,7 @@ CREATE TRIGGER on_auth_user_created
 - **비밀번호 불필요:** 이메일 입력 → Magic Link 발송 → 클릭 → 인증 완료
 - **접근 제한:** `allowed_emails` 테이블로 스터디원만 가입 가능
 - **프로필 자동 생성:** `on_auth_user_created` 트리거가 `profiles` 행 자동 INSERT
-- **Claude Code MCP:** `SUPABASE_SERVICE_ROLE_KEY` 사용 → RLS 바이패스, `author_id` 명시 지정
+- **Claude Code CLI:** anon key + 사용자 로그인 토큰으로 인증 (service role key 불필요)
 
 ---
 
@@ -286,7 +286,7 @@ CREATE TRIGGER on_auth_user_created
       "args": ["-y", "@supabase/mcp-server"],
       "env": {
         "SUPABASE_URL": "https://xxxxx.supabase.co",
-        "SUPABASE_SERVICE_ROLE_KEY": "xxxxx"
+        "SUPABASE_ANON_KEY": "xxxxx"
       }
     }
   }
@@ -332,17 +332,16 @@ CREATE TRIGGER on_auth_user_created
 # === 필수 (Phase 1) ===
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=xxxxx
-SUPABASE_SERVICE_ROLE_KEY=xxxxx
 GEMINI_API_KEY=xxxxx
 
 # === Phase 2 ===
 RESEND_API_KEY=xxxxx
 
 # === GitHub Actions Secrets ===
-# SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, GEMINI_API_KEY, RESEND_API_KEY
+# SUPABASE_URL, GEMINI_API_KEY, RESEND_API_KEY
 
 # === Claude Code MCP (.claude/mcp.json) ===
-# SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+# SUPABASE_URL, SUPABASE_ANON_KEY
 ```
 
 ---

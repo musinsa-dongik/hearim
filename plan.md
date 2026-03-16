@@ -77,7 +77,6 @@ npm install react-markdown remark-gfm
 ```shell
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=xxxxx
-SUPABASE_SERVICE_ROLE_KEY=xxxxx
 ```
 
 `.gitignore`에 `.env.local` 포함 확인 (create-next-app 기본 포함).
@@ -380,7 +379,7 @@ export default async function Home() {
 
 | 필요한 것 | 시점 | 내용 |
 |---|---|---|
-| 환경 변수 | Step 2 | `SUPABASE_URL`, `ANON_KEY`, `SERVICE_ROLE_KEY` |
+| 환경 변수 | Step 2 | `SUPABASE_URL`, `ANON_KEY` |
 | DB 스키마 완료 확인 | Step 4 | `supabase gen types` 실행 가능 여부 |
 | 브랜치 전략 | Step 9 | `main`/`dev`/`feature/*` 합의 |
 
@@ -693,19 +692,18 @@ W3 원래 범위(열람 페이지 전체)에 **3/9 회의 액션 아이템**을 
 - ✅ collectors.md 문구 수정 + 첫 실행 판별 기준 명확화
 - ✅ 위클리 모드: Git 수집하지 않음 명시
 
-#### TODO: hearim-push 인증 방식 변경 (service role key → anon key + 로그인 토큰)
+#### ~~TODO~~ DONE: hearim-push 인증 방식 변경 (service role key → anon key + 로그인 토큰)
 
-현재 `/hearim-push`는 service role key(관리자 키)를 사용하며, 신규 사용자마다 key를 DM 전달해야 한다.
-다수 사용자 대응을 위해 anon key + 사용자 로그인 토큰 방식으로 전환 필요.
+~~현재 `/hearim-push`는 service role key(관리자 키)를 사용하며, 신규 사용자마다 key를 DM 전달해야 한다.~~
 
-**필요한 작업:**
-1. CLI에서 Supabase 로그인 흐름 구현 — GitHub OAuth → 토큰을 `~/.hearim-session`에 저장 (다혜님)
-2. `hearim-push/SKILL.md` 수정 — service role key 대신 anon key + 저장된 토큰으로 curl 호출 (다혜님)
-3. dailies 테이블 `INSERT` RLS 정책 확인 — `auth.uid() = author_id` 필요 (**이동익님**)
-4. 토큰 갱신 로직 (refresh token) 추가 (다혜님)
-5. `install-skills.sh`에서 `HEARIM_SERVICE_ROLE_KEY` 제거, anon key로 교체
-
-> **우선순위:** 사용자가 늘어나기 전에 전환. 이동익님과 다음 회의에서 RLS 정책 확인 후 착수.
+**완료 (2026-03-16):** anon key + 사용자 로그인 토큰 방식으로 전환 완료.
+- ✅ CLI 로그인 흐름 (`/cli/auth` → `~/.hearim-session`) 구현
+- ✅ `hearim-push/SKILL.md` — anon key + 저장된 토큰으로 curl 호출
+- ✅ 토큰 갱신 로직 (refresh token) 포함
+- ✅ `install-skills.sh`에서 service role key 제거, anon key로 교체
+- ✅ `auth/callback` — admin client(service role) 제거, 일반 client로 교체
+- ✅ `src/lib/supabase/admin.ts` 삭제
+- ✅ `.env.local`에서 `SUPABASE_SERVICE_ROLE_KEY` 제거
 
 ---
 
@@ -722,14 +720,22 @@ W3 원래 범위(열람 페이지 전체)에 **3/9 회의 액션 아이템**을 
 
 ### 인프라 / 배포
 
-- ✅ 프로필 자동 생성 — GitHub 로그인 시 service role admin 클라이언트로 profiles 자동 생성
+- ✅ 프로필 자동 생성 — GitHub 로그인 시 인증된 클라이언트로 자기 profiles 자동 생성 (service role 제거됨)
 - ✅ Shadcn-dashboard 업그레이드 (PR #7)
 - ✅ Daily-edit 기능 (PR #6)
 - ✅ Vercel 배포 + 환경 변수 설정 완료
 
+### 보안 정리 (2026-03-16)
+
+- ✅ `SUPABASE_SERVICE_ROLE_KEY` 완전 제거 — `.env.local`, `.env.local.example`, 코드, 문서 일괄 정리
+- ✅ `src/lib/supabase/admin.ts` 삭제 — service role 클라이언트 제거
+- ✅ `auth/callback` — admin client → 인증된 일반 client로 교체 (RLS INSERT 정책으로 충분)
+- ✅ `hearim-push` 인증 테스트 완료 — anon key + refresh token 자동 갱신 확인
+- ✅ `~/.zshrc` HEARIM_ANON_KEY 수정 — 잘못된 publishable key → Supabase JWT anon key로 교체
+
 ---
 
-## Phase 1 진행 현황 요약 (2026-03-15)
+## Phase 1 진행 현황 요약 (2026-03-16)
 
 | 주차 | 목표 | 상태 | 비고 |
 |---|---|---|---|

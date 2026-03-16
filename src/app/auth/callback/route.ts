@@ -1,7 +1,6 @@
 // Auth 콜백 — GitHub 로그인 완료 후 code를 세션 쿠키로 교환
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -23,8 +22,7 @@ export async function GET(request: Request) {
       } = await supabase.auth.getUser();
 
       if (user) {
-        const admin = createAdminClient();
-        const { data: profile } = await admin
+        const { data: profile } = await supabase
           .from("profiles")
           .select("id")
           .eq("id", user.id)
@@ -37,7 +35,9 @@ export async function GET(request: Request) {
             user.email?.split("@")[0] ||
             "Unknown";
 
-          await admin.from("profiles").insert({
+          // RLS INSERT 정책으로 자기 프로필만 생성 가능 (service_role 불필요)
+          // @ts-expect-error -- Supabase generated types mark INSERT as never due to RLS inference
+          await supabase.from("profiles").insert({
             id: user.id,
             name,
             email: user.email ?? null,
