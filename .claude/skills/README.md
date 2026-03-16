@@ -16,15 +16,15 @@
 
 ## 설치 후 필수 설정
 
-### 1. Supabase 키 입력
+### 1. Supabase anon key 입력
 
-`~/.zshrc`에 추가된 `HEARIM_SERVICE_ROLE_KEY`를 실제 키로 교체합니다.
-(팀 리드에게 DM으로 전달받으세요)
+`~/.zshrc`에 추가된 `HEARIM_ANON_KEY`를 실제 키로 교체합니다.
+(Supabase 대시보드 → Settings → API → anon key)
 
 ```bash
 # ~/.zshrc 에서 이 부분을 찾아 수정
-export HEARIM_SUPABASE_URL="your-supabase-url"
-export HEARIM_SERVICE_ROLE_KEY="여기에_서비스_롤_키_입력"
+export HEARIM_SUPABASE_URL="https://your-project.supabase.co"
+export HEARIM_ANON_KEY="여기에_anon_key_입력"
 ```
 
 수정 후:
@@ -32,11 +32,15 @@ export HEARIM_SERVICE_ROLE_KEY="여기에_서비스_롤_키_입력"
 source ~/.zshrc
 ```
 
-### 2. Supabase 프로필 등록
+### 2. CLI 인증 (최초 1회)
 
-`/hearim-push` 실행 시 git 이메일로 author_id를 조회합니다.
-Supabase `profiles` 테이블에 본인의 이메일이 등록되어 있어야 합니다.
-(GitHub 로그인 시 자동 생성됨)
+`/hearim-push`를 처음 실행하면 세션 토큰을 요청합니다:
+
+1. https://hearim.vercel.app/cli/auth 에 접속 (GitHub 로그인 필요)
+2. 표시된 토큰을 복사
+3. 터미널에 붙여넣기
+
+토큰은 `~/.hearim-session`에 저장되어 이후 자동으로 사용됩니다.
 
 ## 선택 설정
 

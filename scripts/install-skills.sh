@@ -112,16 +112,21 @@ echo ""
 echo "[4/5] 환경 변수 설정"
 if grep -q "HEARIM_SUPABASE_URL" "$SHELL_RC" 2>/dev/null; then
   echo "  환경 변수 이미 존재 (건너뜀)"
+  # 기존 SERVICE_ROLE_KEY → ANON_KEY 마이그레이션 안내
+  if grep -q "HEARIM_SERVICE_ROLE_KEY" "$SHELL_RC" 2>/dev/null; then
+    echo "  ⚠️  HEARIM_SERVICE_ROLE_KEY는 더 이상 사용하지 않습니다."
+    echo "     ~/.zshrc에서 HEARIM_SERVICE_ROLE_KEY를 HEARIM_ANON_KEY로 교체하세요."
+  fi
 else
   cat >> "$SHELL_RC" << 'ZSHRC'
 
 # === 헤아림 ===
 export HEARIM_SUPABASE_URL="https://uoubxqesmvpvtqcghvps.supabase.co"
-export HEARIM_SERVICE_ROLE_KEY="여기에_서비스_롤_키_입력"
+export HEARIM_ANON_KEY="여기에_anon_key_입력"
 ZSHRC
   echo "  OK ~/.zshrc에 환경 변수 추가"
-  echo "  ⚠️  HEARIM_SERVICE_ROLE_KEY를 실제 키로 교체하세요."
-  echo "     (팀 리드에게 DM으로 전달받기)"
+  echo "  ⚠️  HEARIM_ANON_KEY를 실제 키로 교체하세요."
+  echo "     (Supabase 대시보드 → Settings → API → anon key)"
 fi
 
 # 6. 레거시 commands 정리 안내
@@ -145,8 +150,8 @@ echo "  헤아림 스킬 설치 완료"
 echo "========================================="
 echo ""
 echo "  필수 설정:"
-echo "    1. ~/.zshrc의 HEARIM_SERVICE_ROLE_KEY를 실제 키로 교체"
-echo "       (팀 리드에게 DM으로 전달받기)"
+echo "    1. ~/.zshrc의 HEARIM_ANON_KEY를 실제 키로 교체"
+echo "       (Supabase 대시보드 → Settings → API → anon key)"
 echo "    2. source ~/.zshrc"
 echo ""
 echo "  선택 설정:"
@@ -157,4 +162,7 @@ echo "    /hearim              -> 오늘의 학습 기록 생성"
 echo "    /hearim daily 2026-03-12  -> 특정 날짜 학습 기록"
 echo "    /hearim weekly       -> 위클리 스터디 기록"
 echo "    /hearim-push         -> DB에 draft로 저장"
+echo ""
+echo "  최초 /hearim-push 실행 시:"
+echo "    https://hearim.vercel.app/cli/auth 에서 토큰을 발급받으세요."
 echo ""
