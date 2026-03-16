@@ -16,18 +16,10 @@
 
 ## 설치 후 필수 설정
 
-### 1. Supabase anon key 입력
+### 1. 환경 변수 적용
 
-`~/.zshrc`에 추가된 `HEARIM_ANON_KEY`를 실제 키로 교체합니다.
-(Supabase 대시보드 → Settings → API → anon key)
+설치 스크립트가 `~/.zshrc`에 자동 추가합니다. 적용만 하면 됩니다:
 
-```bash
-# ~/.zshrc 에서 이 부분을 찾아 수정
-export HEARIM_SUPABASE_URL="https://your-project.supabase.co"
-export HEARIM_ANON_KEY="여기에_anon_key_입력"
-```
-
-수정 후:
 ```bash
 source ~/.zshrc
 ```

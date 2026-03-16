@@ -122,11 +122,9 @@ else
 
 # === 헤아림 ===
 export HEARIM_SUPABASE_URL="https://uoubxqesmvpvtqcghvps.supabase.co"
-export HEARIM_ANON_KEY="여기에_anon_key_입력"
+export HEARIM_ANON_KEY="sb_publishable_3_GThAIPlbdt-m022sWKOQ_Ti8JZ0Ie"
 ZSHRC
   echo "  OK ~/.zshrc에 환경 변수 추가"
-  echo "  ⚠️  HEARIM_ANON_KEY를 실제 키로 교체하세요."
-  echo "     (Supabase 대시보드 → Settings → API → anon key)"
 fi
 
 # 6. 레거시 commands 정리 안내
@@ -150,9 +148,7 @@ echo "  헤아림 스킬 설치 완료"
 echo "========================================="
 echo ""
 echo "  필수 설정:"
-echo "    1. ~/.zshrc의 HEARIM_ANON_KEY를 실제 키로 교체"
-echo "       (Supabase 대시보드 → Settings → API → anon key)"
-echo "    2. source ~/.zshrc"
+echo "    1. source ~/.zshrc"
 echo ""
 echo "  선택 설정:"
 echo "    - ~/.hearim-config 편집 -> 커밋 수집 레포 추가/변경"
