@@ -1,6 +1,6 @@
 ---
 name: hearim
-description: "헤아림 학습 기록 생성. 오늘 한 일에서 개발 용어/개념을 추출하고 배움 카드를 작성한다. 'study', '스터디', '데일리 학습', '위클리 스터디' 키워드에 반응"
+description: "헤아림 학습 기록 생성. 오늘 한 일에서 개발 용어/개념을 추출하고 배움 카드를 작성한다. 'hearim', '헤아림', '데일리 학습', '위클리 스터디' 키워드에 반응"
 argument-hint: "[daily|weekly] [YYYY-MM-DD]"
 disable-model-invocation: true
 allowed-tools: Bash(git *), Bash(bash *), Bash(source *), Read, Write, Edit, Glob, Grep
@@ -156,5 +156,4 @@ $ARGUMENTS[0]에 따라 모드를 결정한다:
 - 민감한 정보(API 키, 비밀번호, 내부 URL 등)는 제외한다
 - **대외비 제거**: Jira 번호, 커밋 해시, 줄 수, 파일 수, 내부 서비스명/프로젝트명을 출력물에 포함하지 않는다
 - 내부 컴포넌트/함수명은 일반화한다 (예: ReviewGalleryFilter -> LegacyFilter)
-- content에 이모지를 쓰지 않는다 (섹션 제목 포함)
 - 헤아림 스터디 발표 자료로 활용할 수 있도록 "설명하듯이" 정리한다
