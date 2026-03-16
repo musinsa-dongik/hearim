@@ -750,6 +750,26 @@ W3 원래 범위(열람 페이지 전체)에 **3/9 회의 액션 아이템**을 
 - [ ] 직접 작성 폼 (`/daily/write`)
 - [ ] 초안 관리 고도화 (편집 기능 — 동익님 BlockNote 에디터 검토 중)
 - [ ] Vercel 프로덕션 배포 최종 확인
+- [ ] 홈 메인 주간 캘린더 — 월~금 날짜별 데일리 작성자 이름 표시 (Tailwind grid, 라이브러리 불필요)
+
+### 위클리 자동 생성 이슈 (2026-03-16)
+
+PR #8 머지 완료 (`/api/weekly/generate` + Vercel Cron + Gemini). 하지만 **Gemini API 사용 불가**:
+
+**문제:**
+- 회사 Google Workspace 계정으로 발급한 Gemini API key는 `limit: 0` (조직 관리자가 외부 API 차단)
+- 개인 Gmail 계정으로 키를 발급하면 동작하지만, 개인 키를 프로덕션에 쓰는 것이 적절한지 의문
+
+**추가 발견:**
+- `gemini-2.5-flash-preview-05-20` 모델명 오류 → `gemini-2.0-flash`로 수정 필요 (로컬에서만 수정, 아직 미커밋)
+
+**검토 중인 대안:**
+1. **개인 Gmail Gemini 키로 시작** → 나중에 팀 키로 교체 (환경변수만 변경). 주 1회 무료 호출이라 비용 0원
+2. **Claude API (Haiku)** → 회당 약 $0.02. Anthropic console에서 key 발급 필요
+3. **`/hearim weekly` 스킬로 반자동** → Claude Code에서 수동 실행, DB 데일리 읽어서 위클리 생성. 추가 API key 불필요, 비용 0원
+4. **회사 IT에 Generative Language API 활성화 요청** → 정석이지만 시간 소요
+
+> **다음 액션:** 대안 결정 후 구현. gemini.ts 모델명 수정도 함께 커밋.
 
 ### 데일리 필터 기능 (2026-03-15)
 
