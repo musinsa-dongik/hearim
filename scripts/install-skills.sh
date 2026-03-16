@@ -122,7 +122,7 @@ else
 
 # === 헤아림 ===
 export HEARIM_SUPABASE_URL="https://uoubxqesmvpvtqcghvps.supabase.co"
-export HEARIM_ANON_KEY="sb_publishable_3_GThAIPlbdt-m022sWKOQ_Ti8JZ0Ie"
+export HEARIM_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVvdWJ4cWVzbXZwdnRxY2dodnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NDg0MjksImV4cCI6MjA4ODAyNDQyOX0.BXBo6QUFgvHLfhJtQtd8JWBq9KfDS0hKlscbbtbQHa4"
 ZSHRC
   echo "  OK ~/.zshrc에 환경 변수 추가"
 fi
