@@ -7,6 +7,7 @@ export type Database = {
           name: string;
           email: string | null;
           avatar_url: string | null;
+          team_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -14,6 +15,7 @@ export type Database = {
           name: string;
           email?: string | null;
           avatar_url?: string | null;
+          team_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -21,6 +23,7 @@ export type Database = {
           name?: string;
           email?: string | null;
           avatar_url?: string | null;
+          team_id?: string | null;
           created_at?: string;
         };
       };

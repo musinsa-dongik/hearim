@@ -366,15 +366,15 @@ export default async function Home() {
 
 ### Week 1 체크리스트
 
-- [ ] Step 1: 프로젝트 생성 + 패키지 설치
-- [ ] Step 2: `.env.local` 설정 (이동익님 환경 변수 수령)
-- [ ] Step 3: Supabase 클라이언트 3개 (`client.ts`, `server.ts`, `middleware.ts`) + 루트 `middleware.ts`
-- [ ] Step 4: `database.ts` 타입 정의 (임시 or 자동 생성)
-- [ ] Step 5: Tailwind 색상 토큰 + 폰트 설정
-- [ ] Step 6: 전체 라우트 폴더 구조 생성 (빈 껍데기)
-- [ ] Step 7: `layout.tsx` + `Header` + 공통 UI 컴포넌트 뼈대
-- [ ] Step 8: Supabase 연결 검증 (SELECT 쿼리 성공)
-- [ ] Step 9: GitHub 리포 + 브랜치 전략 합의 + 초기 커밋
+- [x] Step 1: 프로젝트 생성 + 패키지 설치
+- [x] Step 2: `.env.local` 설정 (이동익님 환경 변수 수령)
+- [x] Step 3: Supabase 클라이언트 3개 (`client.ts`, `server.ts`, `middleware.ts`) + 루트 `middleware.ts`
+- [x] Step 4: `database.ts` 타입 정의 (임시 or 자동 생성)
+- [x] Step 5: Tailwind 색상 토큰 + 폰트 설정
+- [x] Step 6: 전체 라우트 폴더 구조 생성 (빈 껍데기)
+- [x] Step 7: `layout.tsx` + `Header` + 공통 UI 컴포넌트 뼈대
+- [x] Step 8: Supabase 연결 검증 (SELECT 쿼리 성공)
+- [x] Step 9: GitHub 리포 + 브랜치 전략 합의 + 초기 커밋
 
 ### 이동익님과의 협업 포인트 (W1)
 
@@ -491,12 +491,12 @@ Magic Link 대신 **GitHub OAuth**를 사용합니다. 회사 GitHub 계정으�
 - [x] Step 2: `/auth/callback` 라우트 (code → 세션 교환)
 - [x] Step 3: 미들웨어 보호 라우트 (미인증 시 `/login`으로 리다이렉트)
 - [x] Step 4: Header 로그인 상태 반영 (로그인/로그아웃 전환)
-- [ ] Step 5: 전체 흐름 테스트 (**Supabase GitHub Provider 설정 후 진행**)
-  - [ ] 비로그인 → `/daily/new` 접근 → `/login?redirectTo=/daily/new`로 이동
-  - [ ] 로그인 버튼 클릭 → GitHub → 콜백 → 원래 페이지로 도착
-  - [ ] Header에 이메일 + 로그아웃 버튼 표시
-  - [ ] 로그아웃 클릭 → Header가 로그인 버튼으로 전환
-  - [ ] 로그아웃 후 보호 라우트 접근 차단 확인
+- [x] Step 5: 전체 흐름 테스트 (✅ Supabase GitHub Provider 설정 완료)
+  - [x] 비로그인 → `/daily/new` 접근 → `/login?redirectTo=/daily/new`로 이동
+  - [x] 로그인 버튼 클릭 → GitHub → 콜백 → 원래 페이지로 도착
+  - [x] Header에 이메일 + 로그아웃 버튼 표시
+  - [x] 로그아웃 클릭 → Header가 로그인 버튼으로 전환
+  - [x] 로그아웃 후 보호 라우트 접근 차단 확인
 
 ---
 
@@ -654,19 +654,19 @@ W3 원래 범위(열람 페이지 전체)에 **3/9 회의 액션 아이템**을 
 
 ### Week 3 체크리스트
 
-- [ ] Step 1: 작성자 이름 노출 버그 수정 (**profiles RLS 정책 확인 필요**)
-- [x] Step 2: 확정 게시물 삭제 버튼 추가
+- [x] Step 1: 작성자 이름 노출 버그 수정 (✅ profiles RLS → `true`로 변경, 2026-03-11)
+- [x] Step 2: 확정 게시물 삭제 버튼 추가 (PostActions.tsx)
 - [x] Step 3: 위클리 목록 페이지 구현
 - [x] Step 4: 위클리 상세 페이지 구현
-- [x] Step 5: 검색 페이지 구현 (Phase A: ilike → **Phase B: FTS RPC 교체 완료**)
-- [ ] Step 6: 프롬프트 / skill 문서 고도화
+- [x] Step 5: 검색 페이지 구현 (Phase A: ilike → ✅ Phase B: FTS RPC 교체 완료)
+- [x] Step 6: 프롬프트 / skill 문서 고도화 (README.md 업데이트, 스킬 시스템 main merge — PR #9)
 
 ### 이동익님에게 확인/요청 사항 (W3)
 
 | 필요한 것 | Step | 내용 | 상태 |
 |---|---|---|---|
-| profiles RLS 정책 확인 | Step 1 | 다른 사용자의 `profiles.name` SELECT가 가능한지. 현재 로그인 시 다른 작성자 이름이 안 보이는 현상 — 프론트 코드는 정상, RLS가 원인일 가능성 높음 | ❓ 확인 필요 |
-| 위클리 테스트 데이터 | Step 3~4 | `weeklies` 테이블에 published 상태 데이터가 있는지. 프론트 위클리 목록/상세 구현 완료했으나 데이터 없으면 동작 확인 불가 | ❓ 확인 필요 |
+| profiles RLS 정책 확인 | Step 1 | 다른 사용자의 `profiles.name` SELECT가 가능한지 | ✅ 해결 (RLS → `true`로 변경, 2026-03-11) |
+| 위클리 테스트 데이터 | Step 3~4 | `weeklies` 테이블에 published 상태 데이터가 있는지 | ❓ 미확인 |
 | FTS 쿼리 (Phase B) | Step 5 | `search_dailies` RPC + 프론트 코드 교체 완료 | ✅ 완료 |
 | 수정 기능 (에디터) | (W4) | 동익님 담당 — BlockNote 에디터 도입 검토 중 | 동익님 담당 |
 
@@ -684,6 +684,89 @@ W3 원래 범위(열람 페이지 전체)에 **3/9 회의 액션 아이템**을 
 
 - 로컬 커맨드 연동 테스트 + 문서화
 - 수정 클릭 시 에디터로 수정 기능 추가
+
+### 스킬 시스템 리뷰 반영 (2026-03-15)
+
+- ✅ detect-env.sh 상대 경로 → SKILL.md 인라인 포함 (글로벌 설치 호환)
+- ✅ hearim-push 완료 URL localhost → hearim.vercel.app
+- ✅ install-skills.sh Supabase URL 복원 (공개 정보), key만 플레이스홀더
+- ✅ collectors.md 문구 수정 + 첫 실행 판별 기준 명확화
+- ✅ 위클리 모드: Git 수집하지 않음 명시
+
+#### TODO: hearim-push 인증 방식 변경 (service role key → anon key + 로그인 토큰)
+
+현재 `/hearim-push`는 service role key(관리자 키)를 사용하며, 신규 사용자마다 key를 DM 전달해야 한다.
+다수 사용자 대응을 위해 anon key + 사용자 로그인 토큰 방식으로 전환 필요.
+
+**필요한 작업:**
+1. CLI에서 Supabase 로그인 흐름 구현 — GitHub OAuth → 토큰을 `~/.hearim-session`에 저장 (다혜님)
+2. `hearim-push/SKILL.md` 수정 — service role key 대신 anon key + 저장된 토큰으로 curl 호출 (다혜님)
+3. dailies 테이블 `INSERT` RLS 정책 확인 — `auth.uid() = author_id` 필요 (**이동익님**)
+4. 토큰 갱신 로직 (refresh token) 추가 (다혜님)
+5. `install-skills.sh`에서 `HEARIM_SERVICE_ROLE_KEY` 제거, anon key로 교체
+
+> **우선순위:** 사용자가 늘어나기 전에 전환. 이동익님과 다음 회의에서 RLS 정책 확인 후 착수.
+
+---
+
+## Week 3 이후 추가 완료 작업
+
+### 스킬 시스템 (feature/hearim-skill)
+
+- ✅ `.claude/commands` → `.claude/skills` 마이그레이션 (PR #9, 2026-03-13)
+- ✅ 스킬 피드백 반영 — 데일리 출력 간소화, 수집경로 범용화 (PR #11, #12)
+  - git log 형식 간소화: `%s (%ai)` 만 출력 (해시/stat 제거)
+  - Jira 티켓 번호만 포함, 커밋 해시/줄수/파일경로 제외
+  - config 미설정 시 `~/Documents/*/` 하위 git 레포 자동 탐색
+- ✅ SKILL.md 환경 감지 스크립트 경로 수정 (PR #10)
+
+### 인프라 / 배포
+
+- ✅ 프로필 자동 생성 — GitHub 로그인 시 service role admin 클라이언트로 profiles 자동 생성
+- ✅ Shadcn-dashboard 업그레이드 (PR #7)
+- ✅ Daily-edit 기능 (PR #6)
+- ✅ Vercel 배포 + 환경 변수 설정 완료
+
+---
+
+## Phase 1 진행 현황 요약 (2026-03-15)
+
+| 주차 | 목표 | 상태 | 비고 |
+|---|---|---|---|
+| **W1** | 프로젝트 초기화 + 공통 기반 | ✅ 완료 | Next.js, Supabase, 레이아웃, 디자인 토큰 |
+| **W2** | 인증 UI | ✅ 완료 | GitHub OAuth, 미들웨어, 세션 관리, 프로필 자동 생성 |
+| **W3** | 열람 페이지 전체 | ✅ 완료 | 위클리, 검색(FTS), 버그 수정, 스킬 시스템 |
+| **W4** | 작성 기능 + 배포 | ⏳ 미착수 | AI 폼, 직접 작성, 초안 관리 |
+
+### W4 남은 작업
+
+- [ ] AI 생성 폼 (`/daily/new`) — 이동익님 `/api/generate` 엔드포인트 의존
+- [ ] 직접 작성 폼 (`/daily/write`)
+- [ ] 초안 관리 고도화 (편집 기능 — 동익님 BlockNote 에디터 검토 중)
+- [ ] Vercel 프로덕션 배포 최종 확인
+
+### 데일리 필터 기능 (2026-03-15)
+
+- ✅ 1단계: `전체보기` / `내것만 보기` 필터 구현 완료
+- ✅ 2단계: `우리 팀` 필터 프론트 코드 구현 완료
+- ✅ DB 작업: `teams` 테이블 생성, `profiles.team_id` 컬럼 추가, 수동 팀 배정 완료
+
+### 페이지 내 검색 기능 (2026-03-15)
+
+- ✅ 데일리 목록: `search_dailies` FTS RPC 활용 (제목+내용 전체 검색, 디바운스 300ms)
+- ✅ 위클리 목록: 클라이언트 필터링 (제목+내용+요약 검색)
+- 검색 입력 UI: 데일리는 필터 탭 옆, 위클리는 목록 상단에 배치
+
+#### 이동익님 협조 필요: GitHub Org 팀 자동 연동
+
+현재 팀 배정은 수동(SQL)이며, 신규 가입자는 `team_id = NULL` 상태로 등록됩니다.
+자동 연동을 위해 아래 작업이 필요합니다:
+
+1. **코드 변경** — 로그인 시 `signInWithOAuth`에 `scopes: 'read:org'` 추가 (다혜님 작업 가능)
+2. **GitHub OAuth App 설정** — musinsa-dongik Organization에서 해당 OAuth App에 Organization access 승인 (Org 관리자 권한 필요 — **이동익님**)
+3. **콜백 로직 추가** — `/auth/callback`에서 GitHub Teams API(`/user/teams`) 호출 → `teams` 테이블 매칭 → `profiles.team_id` 자동 업데이트 (다혜님 작업 가능)
+
+> **우선순위:** 당장은 수동 배정으로 운영 가능. 사용자가 늘어나면 자동 연동 검토.
 
 ---
 
