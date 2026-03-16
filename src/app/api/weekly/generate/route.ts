@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@supabase/supabase-js";
 import { gemini } from "@/lib/gemini";
 
 // Vercel Cron: 매주 토요일 09:00 UTC (= 18:00 KST)
 // 수동 호출도 가능 (CRON_SECRET 헤더 필요)
+// Cron은 인증된 유저 없이 실행되므로 service_role 필요
 
 export async function GET(request: Request) {
   // Vercel Cron 인증 (프로덕션에서만)
@@ -14,7 +15,10 @@ export async function GET(request: Request) {
     }
   }
 
-  const admin = createAdminClient();
+  const admin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
   // 이번 주 월~금 범위 계산 (토요일에 실행되므로 같은 주의 월~금)
   const now = new Date();
