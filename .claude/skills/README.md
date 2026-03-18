@@ -1,6 +1,6 @@
 # 헤아림 Claude Code 스킬 사용법
 
-> **설치 (터미널에서 한 줄 실행):**
+> **클로드 CLI에서 설치 (터미널에서 한 줄 실행):**
 > ```bash
 > curl -sL https://raw.githubusercontent.com/musinsa-dongik/hearim/main/scripts/install-skills.sh | bash
 > ```
